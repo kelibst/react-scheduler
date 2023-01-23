@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
-import counterReducer from './reducers/counterReducer'
+import dayReducer from './reducers/dayReducer'
 
 
 export const store = configureStore({
     reducer: {
-        counter: counterReducer,
+        week_days: dayReducer,
     },
     middleware: [thunk]
 })
