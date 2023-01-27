@@ -2,13 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
 import { userInterface } from "./userReducer";
 
+export interface assignedHourInterface {
+    time: string,
+    assignedUser: userInterface
+}
+
 export interface dayInterface {
     day: string,
     date: moment.Moment,
-    assignedHours?: {
-        time: string,
-        assignedUser: userInterface
-    }
+    assignedHours: assignedHourInterface[]
 }
 moment.updateLocale('en', { week: { dow: 1 } })
 let currentWeekStart = moment().startOf('week');
@@ -18,6 +20,7 @@ for (let i = 0; i < 7; i++) {
     initalDays.push({
         day: currentWeekStart.format('dddd'),
         date: currentWeekStart.clone(),
+        assignedHours: []
     });
     currentWeekStart.add(1, 'day');
 }
@@ -39,11 +42,11 @@ export const weekSlice = createSlice({
     reducers: {
         setCurrentWeek: (state, action) => {
             let newWeek: dayInterface[] = []
-
             for (let i = 1; i < 8; i++) {
                 newWeek.push({
                     day: action.payload.format('dddd'),
                     date: action.payload.clone(),
+                    assignedHours: []
                 });
                 action.payload.add(1, 'day');
             }
@@ -51,11 +54,20 @@ export const weekSlice = createSlice({
         },
         setnewCurrentWeekMoment: (state, action) => {
             state.currentWeekMoment = action.payload.clone()
+        },
+        addAssignedHour: (state, action) => {
+            let dayIndex = action.payload.index;
+            let hour = action.payload.time;
+            let assignedUser = action.payload.assignedUser;
+            state.daysOfWeek[dayIndex].assignedHours.push({
+                time: hour,
+                assignedUser
+            });
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setCurrentWeek, setnewCurrentWeekMoment } = weekSlice.actions
+export const { setCurrentWeek, setnewCurrentWeekMoment, addAssignedHour } = weekSlice.actions
 
 export default weekSlice.reducer
