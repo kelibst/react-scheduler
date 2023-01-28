@@ -25,6 +25,31 @@ const initialState = {
         email: 'kbooste212@gmail.com',
         phone: "+233546149861",
         isAdmin: false
+    },
+    {
+        id: uuidv4(),
+        name: "fenis",
+        dob: new Date(),
+        email: 'kbooste212@gmail.com',
+        phone: "+233546149861",
+        isAdmin: false
+    }
+        ,
+    {
+        id: uuidv4(),
+        name: "Fred",
+        dob: new Date(),
+        email: 'kbooste212@gmail.com',
+        phone: "+233546149861",
+        isAdmin: false
+    },
+    {
+        id: uuidv4(),
+        name: "Frat",
+        dob: new Date(),
+        email: 'kbooste212@gmail.com',
+        phone: "+233546149861",
+        isAdmin: false
     }
     ]
 }

@@ -10,20 +10,32 @@ const WeekDayCalendar: React.FC = () => {
   const dispatch = useDispatch()
   const { daysOfWeek, hoursOfDay, currentWeekMoment } = useSelector((state: RootState) => state.week_days)
 
-  const handleDrop = (e) => {
+ const handleDrop = (e) => {
     let user = JSON.parse(e.dataTransfer.getData("user"));
-    let column = e.target.getAttribute("data-column");
-    let dataIndex = e.target.getAttribute("data-index");
-    console.log(dataIndex, 'dtaind');
+    let column;
+    let dataIndex;
+    let currentDayofWeek: string;
+    let closestParent = e.target.closest('[data-column][data-index]');
+    if(closestParent){
+    column = closestParent.getAttribute("data-column");
+    dataIndex = closestParent.getAttribute("data-index");
+      currentDayofWeek = closestParent.parentElement.firstChild.textContent.split(' ')[0]
+      
+    let day = daysOfWeek.find(day => day.day === currentDayofWeek)
     
-    let day = daysOfWeek.find(day => day.day === e.target.parentElement.firstChild.textContent.split(' ')[0])
+      if(!day || !dataIndex) return;
     dispatch(addAssignedHour({
       time: column,
       index: dataIndex,
       assignedUser: user,
       day: day
     }))
+    }
+    
+
+  
   }
+
 console.log(daysOfWeek);
 
   return (

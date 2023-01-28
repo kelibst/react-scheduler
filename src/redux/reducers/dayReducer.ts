@@ -67,7 +67,6 @@ export const weekSlice = createSlice({
     },
 })
 
-// Action creators are generated for each case reducer function
 export const { setCurrentWeek, setnewCurrentWeekMoment, addAssignedHour } = weekSlice.actions
 
 export default weekSlice.reducer
