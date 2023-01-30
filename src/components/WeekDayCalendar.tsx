@@ -8,39 +8,41 @@ import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 
 const WeekDayCalendar: React.FC = () => {
   const dispatch = useDispatch()
-  const { daysOfWeek, hoursOfDay, currentWeekMoment } = useSelector((state: RootState) => state.week_days)
+  const { month, hoursOfDay, currentWeekNumber } = useSelector((state: RootState) => state.week_days)
 
  const handleDrop = (e) => {
-    let user = JSON.parse(e.dataTransfer.getData("user"));
-    let column;
-    let dataIndex;
-    let currentDayofWeek: string;
-    let closestParent = e.target.closest('[data-column][data-index]');
-    if(closestParent){
-    column = closestParent.getAttribute("data-column");
-    dataIndex = closestParent.getAttribute("data-index");
-      currentDayofWeek = closestParent.parentElement.firstChild.textContent.split(' ')[0]
+    // let user = JSON.parse(e.dataTransfer.getData("user"));
+    // let column;
+    // let dataIndex;
+    // let currentDayofWeek: string;
+    // let closestParent = e.target.closest('[data-column][data-index]');
+    // if(closestParent){
+    // column = closestParent.getAttribute("data-column");
+    // dataIndex = closestParent.getAttribute("data-index");
+    //   currentDayofWeek = closestParent.parentElement.firstChild.textContent.split(' ')[0]
       
-    let day = daysOfWeek.find(day => day.day === currentDayofWeek)
+    // let day = daysOfWeek.find(day => day.day === currentDayofWeek)
     
-      if(!day || !dataIndex) return;
-    dispatch(addAssignedHour({
-      time: column,
-      index: dataIndex,
-      assignedUser: user,
-      day: day
-    }))
-    }
+    //   if(!day || !dataIndex) return;
+    // dispatch(addAssignedHour({
+    //   time: column,
+    //   index: dataIndex,
+    //   assignedUser: user,
+    //   day: day
+    // }))
+    // }
     
 
   
   }
 
-console.log(daysOfWeek);
+  console.log(month);
+  console.log(currentWeekNumber, 'number');
+  
 
   return (
     <table className='border'>
-      <thead className='border-b'>
+      {/* <thead className='border-b'>
         <tr className='border font-bold text-center px-2'>{currentWeekMoment?.format('MMMM')} - {currentWeekMoment?.format("YY")}</tr>
         <tr className='border px-2'>
           <th><button onClick={() => {
@@ -67,7 +69,8 @@ console.log(daysOfWeek);
               </td>)}
           </tr>
         ))}
-      </tbody>
+      </tbody> */}
+
     </table>
   );
 };

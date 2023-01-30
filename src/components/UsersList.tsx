@@ -7,11 +7,9 @@ const UsersList = () => {
     const handleDragStart = (e, user) => {
         e.dataTransfer.setData("user", JSON.stringify(user));
         console.log(user, 'drag start');
-        
     }
     const handleDragEnd = () => {
-        console.log('drag ends');
-        
+        console.log('drag ends'); 
     }
 
     return (
