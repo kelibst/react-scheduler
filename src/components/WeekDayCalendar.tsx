@@ -8,8 +8,8 @@ import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 
 const WeekDayCalendar: React.FC = () => {
   const dispatch = useDispatch()
-  const { month, hoursOfDay, currentWeekNumber } = useSelector((state: RootState) => state.week_days)
-
+  const { activeWeekMoment} = useSelector((state: RootState) => state.week_days)
+const { currentMonth} = useSelector((state: RootState) => state.month)
  const handleDrop = (e) => {
     // let user = JSON.parse(e.dataTransfer.getData("user"));
     // let column;
@@ -36,8 +36,8 @@ const WeekDayCalendar: React.FC = () => {
   
   }
 
-  console.log(month);
-  console.log(currentWeekNumber, 'number');
+  console.log(currentMonth);
+  console.log(activeWeekMoment, 'number');
   
 
   return (

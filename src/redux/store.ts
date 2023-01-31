@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
 import dayReducer from './reducers/dayReducer'
+import monthReducer from './reducers/monthReducer'
 import userReducer from './reducers/userReducer'
 
 
 export const store = configureStore({
     reducer: {
         week_days: dayReducer,
+        month: monthReducer,
         users: userReducer
     },
     middleware: [thunk]
