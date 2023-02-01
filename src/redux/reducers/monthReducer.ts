@@ -11,6 +11,8 @@ export interface yearInterface {
 export interface initialMonthProp {
     years: yearInterface
     currentMonth: weekInterface[],
+    activeYear: string,
+    activeMonth: string,
     initialActiveWeek: number
 }
 
@@ -20,7 +22,7 @@ let currentMonth = moment().startOf('month');
 // let weeksInMonth = currentMonth.isoWeeksInMonth();
 
 
-export const addingNewMonth = (currentMonth: moment.Moment, initalWeekMoment: moment.Moment) => {
+export const generateMonth = (currentMonth: moment.Moment, initalWeekMoment: moment.Moment) => {
     let initialActiveInd = 0
     let monthWeeks = []
     for (let i = 0; i < 6; i++) {
@@ -49,7 +51,7 @@ export const addingNewMonth = (currentMonth: moment.Moment, initalWeekMoment: mo
     return { monthWeeks, initialActiveInd }
 }
 
-const { monthWeeks, initialActiveInd } = addingNewMonth(moment().startOf('month'), moment().startOf('week'))
+const { monthWeeks, initialActiveInd } = generateMonth(moment().startOf('month'), moment().startOf('week'))
 
 let initialYear = moment().format('yyyy').toString()
 let initialMonth = moment().format('MMMM').toString()
@@ -61,6 +63,8 @@ const initialState: initialMonthProp = {
         },
     },
     currentMonth: monthWeeks,
+    activeYear: moment().format("YYYY"),
+    activeMonth: moment().format("MMMM").toString(),
     initialActiveWeek: initialActiveInd
 }
 
@@ -70,7 +74,17 @@ export const monthSlice = createSlice({
     initialState,
     reducers: {
         addNewMonth: (state, action) => {
+            let curmonth = action.payload.month.clone().format("MMMM")
+            let curYear = action.payload.week.clone().format("yy")
+            const { monthWeeks, initialActiveInd } = generateMonth(action.payload.month, action.payload.week)
+            console.log(curYear, curmonth);
 
+            state.years[curYear] = {
+                [curmonth]: monthWeeks
+            }
+            state.initialActiveWeek = initialActiveInd
+            state.activeMonth = curmonth
+            state.activeYear = curYear
         },
         setCurrentMonth: (state, action) => {
             state.currentMonth = action.payload
@@ -81,6 +95,6 @@ export const monthSlice = createSlice({
     },
 })
 
-export const { setCurrentMonth, setInitalActiveWeekInd } = monthSlice.actions
+export const { setCurrentMonth, setInitalActiveWeekInd, addNewMonth } = monthSlice.actions
 
 export default monthSlice.reducer

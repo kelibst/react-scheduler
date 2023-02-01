@@ -5,15 +5,13 @@ import { Action } from 'redux';
 import { addAssignedHour, initialStateProp, setCurrentWeek, setnewCurrentWeekMoment } from '../redux/reducers/dayReducer';
 import { RootState } from '../redux/store';
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
-import { setInitalActiveWeekInd } from '../redux/reducers/monthReducer';
+import { addNewMonth, setInitalActiveWeekInd } from '../redux/reducers/monthReducer';
 
 const WeekDayCalendar: React.FC = () => {
   const dispatch = useDispatch()
   const { activeWeek, hoursOfDay} = useSelector((state: RootState) => state.week_days)
-  const { years, currentMonth, initialActiveWeek } = useSelector((state: RootState) => state.month)
+  const { years, currentMonth, initialActiveWeek, activeMonth, activeYear } = useSelector((state: RootState) => state.month)
   
-  const [activeYear, setActiveYear] = useState(moment().format("YYYY"))
-  const [activeMth, setActiveMth] = useState(moment().format("MMMM").toString())
 
  const handleDrop = (e) => {
     // let user = JSON.parse(e.dataTransfer.getData("user"));
@@ -36,20 +34,24 @@ const WeekDayCalendar: React.FC = () => {
     //   day: day
     // }))
     // }
-    
 
-  
   }
 
-  const activeMonth = years[activeYear][activeMth][initialActiveWeek] 
+  const currentYears = years[activeYear][activeMonth][initialActiveWeek] 
+
+console.log(currentYears);
 
   return (
     <table className='border'>
       <thead className='border-b'>
-        <tr className='border font-bold text-center px-2'>{activeMonth.currentWeekMoment?.format('MMMM')} - {activeMonth.currentWeekMoment?.format("YY")}</tr>
+        <tr className='border font-bold text-center px-2'>{currentYears.currentWeekMoment?.format('MMMM')} - {currentYears.currentWeekMoment?.format("YY")}</tr>
         <tr className='border px-2'>
           <th><button onClick={() => {
-            dispatch(setInitalActiveWeekInd(initialActiveWeek -1))
+            if (initialActiveWeek === 0) {
+              dispatch(addNewMonth({month: currentYears.currentWeekMoment.subtract(1, 'month').startOf("month"), week: currentYears.currentWeekMoment.subtract(1, 'week').startOf('week')}))
+            }  else {
+               dispatch(setInitalActiveWeekInd(initialActiveWeek -1))
+            }
           }}><AiFillCaretLeft /> </button>Days
             <button onClick={() => {
                dispatch(setInitalActiveWeekInd(initialActiveWeek +1))
@@ -61,7 +63,7 @@ const WeekDayCalendar: React.FC = () => {
         </tr>
       </thead>
       <tbody onDragOver={e => e.preventDefault()} onDrop={handleDrop}>
-        {activeMonth.daysOfWeek.map((day, index) => (
+        {currentYears.daysOfWeek.map((day, index) => (
             <tr className='border p-2' key={day.day}>
             <td>{day.day} {day.date.format('DD')}</td>
             {hoursOfDay.map
