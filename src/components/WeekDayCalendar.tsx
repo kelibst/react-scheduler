@@ -39,7 +39,7 @@ const WeekDayCalendar: React.FC = () => {
 
   const currentYears = years[activeYear][activeMonth][initialActiveWeek] 
 
-console.log(currentYears);
+console.log(currentYears, initialActiveWeek);
 
   return (
     <table className='border'>
@@ -54,7 +54,12 @@ console.log(currentYears);
             }
           }}><AiFillCaretLeft /> </button>Days
             <button onClick={() => {
-               dispatch(setInitalActiveWeekInd(initialActiveWeek +1))
+              if (initialActiveWeek === 5) {
+                dispatch(addNewMonth({month: currentYears.currentWeekMoment.add(1, 'month').startOf("month"), week: currentYears.currentWeekMoment.add(1, 'week').startOf('week')}))
+              } else {
+                dispatch(setInitalActiveWeekInd(initialActiveWeek +1))
+              }
+               
               // dispatch(setnewCurrentWeekMoment(currentWeekMoment?.add(1, 'week')))
               // dispatch(setCurrentWeek(currentWeekMoment))
             }}><AiFillCaretRight /> </button>

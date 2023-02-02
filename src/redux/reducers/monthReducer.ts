@@ -76,6 +76,13 @@ export const monthSlice = createSlice({
         addNewMonth: (state, action) => {
             let curmonth = action.payload.month.clone().format("MMMM")
             let curYear = action.payload.week.clone().format("yy")
+            console.log(state.years[curYear]);
+
+            if (state.years[curYear] && state.years[curYear][curmonth]) {
+                state.activeMonth = curmonth
+                state.activeYear = curYear
+                return
+            }
             const { monthWeeks, initialActiveInd } = generateMonth(action.payload.month, action.payload.week)
             console.log(curYear, curmonth);
 
