@@ -1,72 +1,107 @@
-import { createSlice } from "@reduxjs/toolkit";
-import moment from "moment";
-import { userInterface } from "./userReducer";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment';
+import { weekInterface } from './dayReducer';
 
-export interface assignedHourInterface {
-    time: string,
-    assignedUser: userInterface
+
+export interface yearInterface {
+    [year: string]: { [month: string]: weekInterface[] }
 }
 
-export interface dayInterface {
-    day: string,
-    date: moment.Moment,
-    assignedHours: assignedHourInterface[]
+
+export interface initialMonthProp {
+    years: yearInterface
+    currentMonth: weekInterface[],
+    activeYear: string,
+    activeMonth: string,
+    initialActiveWeek: number
 }
+
 moment.updateLocale('en', { week: { dow: 1 } })
-let currentWeekStart = moment().startOf('week');
-let initalDays = []
+// Get the current month and calculate the number of weeks in it
+let currentMonth = moment().startOf('month');
+// let weeksInMonth = currentMonth.isoWeeksInMonth();
 
-for (let i = 0; i < 7; i++) {
-    initalDays.push({
-        day: currentWeekStart.format('dddd'),
-        date: currentWeekStart.clone(),
-        assignedHours: []
-    });
-    currentWeekStart.add(1, 'day');
+
+export const generateMonth = (currentMonth: moment.Moment, initalWeekMoment: moment.Moment) => {
+    let initialActiveInd = 0
+    let monthWeeks = []
+    for (let i = 0; i < 6; i++) {
+        let currentWeekStart = currentMonth.clone().startOf('week');
+        let initalDays = []
+
+        for (let j = 0; j < 6; j++) {
+            let day = {
+                day: currentWeekStart.format('dddd'),
+                date: currentWeekStart.clone(),
+                assignedHours: []
+            }
+            initalDays.push(day);
+            currentWeekStart.add(1, 'day');
+        }
+
+        monthWeeks.push({
+            daysOfWeek: initalDays,
+            currentWeekMoment: currentWeekStart.clone()
+        });
+        if (initalWeekMoment.isSame(currentWeekStart, 'week')) {
+            initialActiveInd = i
+        }
+        currentMonth.add(1, 'week');
+    }
+    return { monthWeeks, initialActiveInd }
+}
+
+const { monthWeeks, initialActiveInd } = generateMonth(moment().startOf('month'), moment().startOf('week'))
+
+let initialYear = moment().format('yyyy').toString()
+let initialMonth = moment().format('MMMM').toString()
+
+const initialState: initialMonthProp = {
+    years: {
+        [initialYear]: {
+            [initialMonth]: monthWeeks,
+        },
+    },
+    currentMonth: monthWeeks,
+    activeYear: moment().format("YYYY"),
+    activeMonth: moment().format("MMMM").toString(),
+    initialActiveWeek: initialActiveInd
 }
 
 
-export interface initialStateProp {
-    daysOfWeek: dayInterface[],
-    currentWeekMoment?: moment.Moment,
-    hoursOfDay: string[],
-}
-const initialState: initialStateProp = {
-    daysOfWeek: initalDays,
-    currentWeekMoment: moment().startOf('week'),
-    hoursOfDay: ['12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm']
-}
-export const weekSlice = createSlice({
-    name: 'week_days',
+export const monthSlice = createSlice({
+    name: 'month',
     initialState,
     reducers: {
-        setCurrentWeek: (state, action) => {
-            let newWeek: dayInterface[] = []
-            for (let i = 1; i < 8; i++) {
-                newWeek.push({
-                    day: action.payload.format('dddd'),
-                    date: action.payload.clone(),
-                    assignedHours: []
-                });
-                action.payload.add(1, 'day');
+        addNewMonth: (state, action) => {
+            let curmonth = action.payload.month.clone().format("MMMM")
+            let curYear = action.payload.week.clone().format("yy")
+            console.log(state.years[curYear]);
+
+            if (state.years[curYear] && state.years[curYear][curmonth]) {
+                state.activeMonth = curmonth
+                state.activeYear = curYear
+                return
             }
-            state.daysOfWeek = newWeek
+            const { monthWeeks, initialActiveInd } = generateMonth(action.payload.month, action.payload.week)
+            console.log(curYear, curmonth);
+
+            state.years[curYear] = {
+                [curmonth]: monthWeeks
+            }
+            state.initialActiveWeek = initialActiveInd
+            state.activeMonth = curmonth
+            state.activeYear = curYear
         },
-        setnewCurrentWeekMoment: (state, action) => {
-            state.currentWeekMoment = action.payload.clone()
+        setCurrentMonth: (state, action) => {
+            state.currentMonth = action.payload
         },
-        addAssignedHour: (state, action) => {
-            let dayIndex = action.payload.index;
-            let hour = action.payload.time;
-            let assignedUser = action.payload.assignedUser;
-            state.daysOfWeek[dayIndex].assignedHours.push({
-                time: hour,
-                assignedUser
-            });
+        setInitalActiveWeekInd: (state, action) => {
+            state.initialActiveWeek = action.payload
         }
     },
 })
 
-export const { setCurrentWeek, setnewCurrentWeekMoment, addAssignedHour } = weekSlice.actions
+export const { setCurrentMonth, setInitalActiveWeekInd, addNewMonth } = monthSlice.actions
 
-export default weekSlice.reducer
+export default monthSlice.reducer
