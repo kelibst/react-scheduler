@@ -1,16 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment';
-import { weekInterface } from './dayReducer';
+import { dayInterface, weekInterface } from './dayReducer';
 
 export interface yearInterface {
-    [year: string]: weekInterface[]
+    [year: string]: { [week: string]: dayInterface[] }
 }
 
 export interface yearStateInterface {
     years: yearInterface
-    currentMonth: weekInterface[],
+    activeWeek: moment.Moment,
 }
 
+moment.updateLocale('en', { week: { dow: 1 } })
 
 const genWeek = (currentWeekMoment: moment.Moment) => {
     let binDay = `${currentWeekMoment.format('DD')}-${currentWeekMoment.format('MMM')}`
@@ -31,9 +32,10 @@ const genWeek = (currentWeekMoment: moment.Moment) => {
 const genMonth = (monthMoment: moment.Moment) => {
     let i = 0
     let monthArry = []
-    while (i < 6) {
+    while (i < 5) {
         const week = genWeek(monthMoment.startOf('week'))
         monthArry.push(week)
+        i += 1
     }
     return monthArry
 }
@@ -48,9 +50,28 @@ monthArray.map(mth => {
 const initialState: yearStateInterface = {
     years: {
         [initalYear]: yearsCont
-    }
+    },
+    activeWeek: moment().startOf('week')
 }
 
 
-moment.updateLocale('en', { week: { dow: 1 } })
+export const monthSlice = createSlice({
+    name: 'month',
+    initialState,
+    reducers: {
+        genAddMonth: (state, action) => {
+            const { monthMoment } = action.payload
+            let year = monthMoment.format('yyyy')
+            const monthArray = genMonth(monthMoment)
+            monthArray.map(mth => {
+                if (!state.years[year]) {
+                    state.years[year] = {}
+                }
+                state.years[year][mth.binDay] = mth.initalDays
+            })
+        }
+    }
+})
 
+
+export default monthSlice.reducer
