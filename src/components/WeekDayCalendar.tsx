@@ -2,9 +2,9 @@ import moment, { months } from 'moment';
 import React, { Dispatch, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Action } from 'redux';
-import { addAssignedHour, initialStateProp, setCurrentWeek, setnewCurrentWeekMoment } from '../redux/reducers/dayReducer';
 import { RootState } from '../redux/store';
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+import { genAddMonth, setActiveWeek } from '../redux/reducers/monthReducer';
 // import { addNewMonth, setInitalActiveWeekInd } from '../redux/reducers/monthReducer';
 
 const WeekDayCalendar: React.FC = () => {
@@ -16,7 +16,7 @@ const WeekDayCalendar: React.FC = () => {
    let binDay = `${activeWeek.format('DD')}-${activeWeek.format('MMM')}`
  
   let week = years[year][binDay]
- console.log(week[0], 'week');
+  
  const handleDrop = (e) => {
     // let user = JSON.parse(e.dataTransfer.getData("user"));
     // let column;
@@ -40,10 +40,17 @@ const WeekDayCalendar: React.FC = () => {
     // }
 
   }
+console.log(years);
 
-//   const currentYears = years[activeYear][activeMonth][initialActiveWeek] 
+  const traverseWeek = (weekMoment: moment.Moment) => {
+       let year: string = weekMoment.format('yyyy')
+            let binDay = `${weekMoment.format('DD')}-${weekMoment.format('MMM')}`
+            if (!years[year] || !years[year][binDay] ) {
+                dispatch(genAddMonth({ monthMoment: weekMoment.clone().startOf("month") })) 
+            }
+            dispatch(setActiveWeek({weekMoment}))
+  }
 
-// console.log(years, initialActiveWeek);
 
   return (
     <table className='border'>
@@ -51,17 +58,17 @@ const WeekDayCalendar: React.FC = () => {
         <tr className='border font-bold text-center px-2'>{activeWeek.format('MMMM')} - {activeWeek.format("YY")}</tr>
         <tr className='border px-2'>
           <th><button onClick={() => {
-            
+            traverseWeek(activeWeek.subtract(1,'week'))
           }}><AiFillCaretLeft /> </button>Days
             <button onClick={() => {
-            
+             traverseWeek(activeWeek.add(1, 'week'))
             }}><AiFillCaretRight /> </button>
           </th>
           {hoursOfDay.map(hour => <th className='p-2 border' key={hour}>{hour}</th>)}
         </tr>
       </thead>
       <tbody onDragOver={e => e.preventDefault()} onDrop={handleDrop}>
-        {week.map((day, index) => (
+        {week?.map((day, index) => (
             <tr className='border p-2' key={day.day}>
             <td>{day.day} {day.date.format('DD')}</td>
             {hoursOfDay.map

@@ -75,6 +75,6 @@ export const weekSlice = createSlice({
     },
 })
 
-export const { setCurrentWeek, setActiveWeek, setnewCurrentWeekMoment, addAssignedHour } = weekSlice.actions
+export const { } = weekSlice.actions
 
 export default weekSlice.reducer

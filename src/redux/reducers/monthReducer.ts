@@ -69,9 +69,12 @@ export const monthSlice = createSlice({
                 }
                 state.years[year][mth.binDay] = mth.initalDays
             })
+        },
+        setActiveWeek: (state, action) => {
+            state.activeWeek = action.payload.weekMoment.clone()
         }
     }
 })
 
-
+export const { genAddMonth, setActiveWeek } = monthSlice.actions
 export default monthSlice.reducer
