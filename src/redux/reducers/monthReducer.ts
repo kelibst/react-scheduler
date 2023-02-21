@@ -45,7 +45,7 @@ const initalYear = motMoment.format("yyyy")
 const monthArray = genMonth(motMoment)
 let yearsCont = {}
 monthArray.map(mth => {
-    yearsCont[mth.binDay] = mth.initalDays
+    yearsCont[mth.binDay]= mth.initalDays
 })
 const initialState: yearStateInterface = {
     years: {
@@ -72,9 +72,20 @@ export const monthSlice = createSlice({
         },
         setActiveWeek: (state, action) => {
             state.activeWeek = action.payload.weekMoment.clone()
+        },
+        addAssignedHour: (state, action) => {
+            //add user to the assignedHour array on the specify day
+            const {index, time, assignedUser, dayMoment} = action.payload
+            let year = dayMoment.format('yyyy')
+            let beginningWeek =  `${dayMoment.format('DD')}-${dayMoment.format('MMM')}`
+            
+            state.years[year][beginningWeek][Number(index)].assignedHours.push({
+                time,
+                assignedUser
+            });
         }
     }
 })
 
-export const { genAddMonth, setActiveWeek } = monthSlice.actions
+export const { genAddMonth, setActiveWeek, addAssignedHour } = monthSlice.actions
 export default monthSlice.reducer

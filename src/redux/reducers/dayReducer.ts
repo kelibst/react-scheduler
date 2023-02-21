@@ -63,15 +63,15 @@ export const weekSlice = createSlice({
         setActiveWeek: (state, action) => {
             state.activeWeek = action.payload
         },
-        addAssignedHour: (state, action) => {
-            let dayIndex = action.payload.index;
-            let hour = action.payload.time;
-            let assignedUser = action.payload.assignedUser;
-            // state.daysOfWeek[dayIndex].assignedHours.push({
-            //     time: hour,
-            //     assignedUser
-            // });
-        }
+        // addAssignedHour: (state, action) => {
+        //     let dayIndex = action.payload.index;
+        //     let hour = action.payload.time;
+        //     let assignedUser = action.payload.assignedUser;
+        //     // state.daysOfWeek[dayIndex].assignedHours.push({
+        //     //     time: hour,
+        //     //     assignedUser
+        //     // });
+        // }
     },
 })
 
