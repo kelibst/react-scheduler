@@ -1,14 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment';
-import { dayInterface, weekInterface } from './dayReducer';
+import { userInterface } from './userReducer';
+
+export interface assignedHourInterface {
+    time: string,
+    assignedUser: userInterface
+}
+
+export interface dayInterface {
+    day: string,
+    date: moment.Moment,
+    assignedHours: assignedHourInterface[]
+}
 
 export interface yearInterface {
     [year: string]: { [week: string]: dayInterface[] }
 }
-
+export interface yearContInter { [week: string]: dayInterface[] }
 export interface yearStateInterface {
     years: yearInterface
     activeWeek: moment.Moment,
+    hoursOfDay: string[],
 }
 
 moment.updateLocale('en', { week: { dow: 1 } })
@@ -43,7 +55,7 @@ const genMonth = (monthMoment: moment.Moment) => {
 const motMoment = moment().startOf('month')
 const initalYear = motMoment.format("yyyy")
 const monthArray = genMonth(motMoment)
-let yearsCont = {}
+let yearsCont: yearContInter = {}
 monthArray.map(mth => {
     yearsCont[mth.binDay]= mth.initalDays
 })
@@ -51,7 +63,8 @@ const initialState: yearStateInterface = {
     years: {
         [initalYear]: yearsCont
     },
-    activeWeek: moment().startOf('week')
+    activeWeek: moment().startOf('week'),
+    hoursOfDay: ['12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'],
 }
 
 
@@ -71,6 +84,7 @@ export const monthSlice = createSlice({
             })
         },
         setActiveWeek: (state, action) => {
+            //set the currentActive Week 
             state.activeWeek = action.payload.weekMoment.clone()
         },
         addAssignedHour: (state, action) => {

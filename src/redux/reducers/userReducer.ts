@@ -28,7 +28,7 @@ const initialState = {
     },
     {
         id: uuidv4(),
-        name: "fenis",
+        name: "Felix Annor",
         dob: new Date(),
         email: 'kbooste212@gmail.com',
         phone: "+233546149861",
@@ -37,7 +37,7 @@ const initialState = {
         ,
     {
         id: uuidv4(),
-        name: "Fred",
+        name: "Fred Gbator",
         dob: new Date(),
         email: 'kbooste212@gmail.com',
         phone: "+233546149861",
@@ -45,7 +45,7 @@ const initialState = {
     },
     {
         id: uuidv4(),
-        name: "Frat",
+        name: "Frat Edwin",
         dob: new Date(),
         email: 'kbooste212@gmail.com',
         phone: "+233546149861",
