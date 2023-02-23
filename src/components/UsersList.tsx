@@ -9,15 +9,15 @@ const UsersList = () => {
         e.dataTransfer.setData("user", JSON.stringify(user));
     }
     const handleDragEnd = () => {
-        console.log('drag ends'); 
+        console.log('drag just end'); 
     }
 
     return (
         <div>
             {allUsers.length > 0 && (
-                <div className='my-4 max-w-xs'>
+                <div className='my-4 w-40'>
                     <ul>
-                        {allUsers.map((user) => <li  key={user.id} onDragEnd={handleDragEnd}  draggable onDragStart={e => handleDragStart(e, user)} className='p-4 border cursor-pointer'>{user.name}</li>)}
+                        {allUsers.map((user) => <li  key={user.id} onDragEnd={handleDragEnd}  draggable onDragStart={e => handleDragStart(e, user)} className='p-4 border cursor-pointer font-medium'>{user.name}</li>)}
                     </ul>
                 </div>)
             }

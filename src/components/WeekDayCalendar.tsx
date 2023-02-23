@@ -74,7 +74,7 @@ const WeekDayCalendar: React.FC = () => {
 
   return (
     <div>
-      <div className='border font-bold text-center px-2'>{activeWeek.format('MMMM')} - {activeWeek.format("YY")}</div>
+      <div className='border font-bold text-center m-4 p-4'>{activeWeek.format('MMMM')} - {activeWeek.format("YY")}</div>
       <table className='border'>
         <thead className='border-b'>
           <tr className='border px-2'>
@@ -85,18 +85,18 @@ const WeekDayCalendar: React.FC = () => {
                 traverseWeek(activeWeek.add(1, 'week'))
               }}><AiFillCaretRight /> </button>
             </th>
-            {hoursOfDay.map(hour => <th className='p-2 border' key={hour}>{hour}</th>)}
+            {hoursOfDay.map(hour => <th className='p-2 border font-bold' key={hour}>{hour}</th>)}
           </tr>
         </thead>
-        <tbody onDragOver={e => e.preventDefault()} onDrop={handleDrop}>
+        <tbody className='mx-2 px-2' onDragOver={e => e.preventDefault()} onDrop={handleDrop}>
           {week?.map((day, index) => (
-            <tr className='border p-2' key={day.day}>
-              <td>{day.day} {day.date.format('DD')}</td>
+            <tr className='border p-4 m-4' key={day.day}>
+              <td className='font-bold p-4 m-4'>{day.day} {day.date.format('DD')}</td>
               {hoursOfDay.map
                 (hour => <td data-column={hour} data-index={index} className='p-2 border' key={hour}>
                   {day.assignedHours.filter(assignedHour => assignedHour.time === hour).map((assignedHour) => (
-                    <div className="bg-gray-100 relative rounded-md px-3 " key={assignedHour.assignedUser.name}> 
-                   <span>{assignedHour.assignedUser.name}</span>  <span className='absolute top-0 right-0' onClick={(e) => removeUser(e, assignedHour.assignedUser)}> <AiFillCloseCircle /></span></div>
+                    <div className="bg-gray-100 relative my-2 rounded-md px-3 text-bold" key={assignedHour.assignedUser.name}> 
+                   <span className='font-medium'>{assignedHour.assignedUser.name}</span>  <span className='absolute top-0 right-0' onClick={(e) => removeUser(e, assignedHour.assignedUser)}> <AiFillCloseCircle /></span></div>
                   ))}
                 </td>)}   
             </tr>
