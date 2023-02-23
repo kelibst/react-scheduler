@@ -1,14 +1,15 @@
 import { Provider } from "react-redux";
 import './App.css'
+import UsersList from "./components/UsersList";
+import WeekDayCalendar from "./components/WeekDayCalendar";
 import { store } from './redux/store'
 
 function App() {
  
   return (
   <Provider store={store}>
-    <div className="text-2xl font-bold text-center">
-     home
-    </div>
+      <WeekDayCalendar />
+      <UsersList />
   </Provider>
     
   )
