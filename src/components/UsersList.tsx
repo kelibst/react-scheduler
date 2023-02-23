@@ -15,7 +15,7 @@ const UsersList = () => {
     return (
         <div>
             {allUsers.length > 0 && (
-                <div className='my-4'>
+                <div className='my-4 max-w-xs'>
                     <ul>
                         {allUsers.map((user) => <li  key={user.id} onDragEnd={handleDragEnd}  draggable onDragStart={e => handleDragStart(e, user)} className='p-4 border cursor-pointer'>{user.name}</li>)}
                     </ul>

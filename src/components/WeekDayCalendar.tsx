@@ -43,7 +43,6 @@ const WeekDayCalendar: React.FC = () => {
   }
 
   const removeUser = (e: any, user: userInterface) => {
-    
     let dataIndex;
     let currentDayofWeek: string;
     let closestParent = e.target.closest('[data-column][data-index]');

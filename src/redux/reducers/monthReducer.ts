@@ -57,7 +57,7 @@ const initalYear = motMoment.format("yyyy")
 const monthArray = genMonth(motMoment)
 let yearsCont: yearContInter = {}
 monthArray.map(mth => {
-    yearsCont[mth.binDay]= mth.initalDays
+    yearsCont[mth.binDay] = mth.initalDays
 })
 const initialState: yearStateInterface = {
     years: {
@@ -89,19 +89,23 @@ export const monthSlice = createSlice({
         },
         addAssignedHour: (state, action) => {
             //add user to the assignedHour array on the specify day
-            const {index, time, assignedUser, dayMoment} = action.payload
+            const { index, time, assignedUser, dayMoment } = action.payload
             let year = dayMoment.format('yyyy')
-            let beginningWeek =  `${dayMoment.format('DD')}-${dayMoment.format('MMM')}`
-            
-            state.years[year][beginningWeek][Number(index)].assignedHours.push({
-                time,
-                assignedUser
-            });
-        }, 
+            let beginningWeek = `${dayMoment.format('DD')}-${dayMoment.format('MMM')}`
+            // Check if assignedUser already exists in the assignedHours array
+            let existingUser = state.years[year][beginningWeek][Number(index)].assignedHours.find(hour => hour.assignedUser.id === assignedUser.id)
+
+            if (!existingUser) {
+                state.years[year][beginningWeek][Number(index)].assignedHours.push({
+                    time,
+                    assignedUser
+                })
+            }
+        },
         removeAssignedHour: (state, action) => {
-            const {index, userId, dayMoment} = action.payload
+            const { index, userId, dayMoment } = action.payload
             let year = dayMoment.format('yyyy')
-            let beginningWeek =  `${dayMoment.format('DD')}-${dayMoment.format('MMM')}`
+            let beginningWeek = `${dayMoment.format('DD')}-${dayMoment.format('MMM')}`
             let assgnedHour = state.years[year][beginningWeek][Number(index)].assignedHours.filter(user => {
                 return user.assignedUser.id !== userId
             })
