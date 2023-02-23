@@ -97,9 +97,18 @@ export const monthSlice = createSlice({
                 time,
                 assignedUser
             });
+        }, 
+        removeAssignedHour: (state, action) => {
+            const {index, userId, dayMoment} = action.payload
+            let year = dayMoment.format('yyyy')
+            let beginningWeek =  `${dayMoment.format('DD')}-${dayMoment.format('MMM')}`
+            let assgnedHour = state.years[year][beginningWeek][Number(index)].assignedHours.filter(user => {
+                return user.assignedUser.id !== userId
+            })
+            state.years[year][beginningWeek][Number(index)].assignedHours = assgnedHour
         }
     }
 })
 
-export const { genAddMonth, setActiveWeek, addAssignedHour } = monthSlice.actions
+export const { genAddMonth, setActiveWeek, addAssignedHour, removeAssignedHour } = monthSlice.actions
 export default monthSlice.reducer

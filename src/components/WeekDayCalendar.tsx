@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Action } from 'redux';
 import { RootState } from '../redux/store';
 import { AiFillCaretLeft, AiFillCaretRight, AiFillCloseCircle } from "react-icons/ai";
-import { addAssignedHour, genAddMonth, setActiveWeek } from '../redux/reducers/monthReducer';
+import { addAssignedHour, genAddMonth, removeAssignedHour, setActiveWeek } from '../redux/reducers/monthReducer';
+import { userInterface } from '../redux/reducers/userReducer';
 // import { addNewMonth, setInitalActiveWeekInd } from '../redux/reducers/monthReducer';
 
 const WeekDayCalendar: React.FC = () => {
@@ -37,6 +38,24 @@ const WeekDayCalendar: React.FC = () => {
         index: dataIndex,
         assignedUser: user,
         dayMoment: day.date.startOf('week').clone()
+      }))
+    }
+  }
+
+  const removeUser = (e: any, user: userInterface) => {
+    
+    let dataIndex;
+    let currentDayofWeek: string;
+    let closestParent = e.target.closest('[data-column][data-index]');
+    if (closestParent) {
+      dataIndex = closestParent.getAttribute("data-index");
+      currentDayofWeek = closestParent.parentElement.firstChild.textContent.split(' ')[0]
+      let day = week.find(day => day.day === currentDayofWeek)
+      if (!day || !dataIndex) return;
+      dispatch(removeAssignedHour({
+        index: dataIndex,
+        dayMoment: day.date.startOf('week').clone(),
+        userId: user.id
       }))
     }
   }
@@ -78,9 +97,7 @@ const WeekDayCalendar: React.FC = () => {
                 (hour => <td data-column={hour} data-index={index} className='p-2 border' key={hour}>
                   {day.assignedHours.filter(assignedHour => assignedHour.time === hour).map((assignedHour) => (
                     <div className="bg-gray-100 relative rounded-md px-3 " key={assignedHour.assignedUser.name}> 
-                   <span>{assignedHour.assignedUser.name}</span>  <span className='absolute top-0 right-0' onClick={() => {
-                    console.log('close clicked')
-                   }}> <AiFillCloseCircle /></span></div>
+                   <span>{assignedHour.assignedUser.name}</span>  <span className='absolute top-0 right-0' onClick={(e) => removeUser(e, assignedHour.assignedUser)}> <AiFillCloseCircle /></span></div>
                   ))}
                 </td>)}   
             </tr>
