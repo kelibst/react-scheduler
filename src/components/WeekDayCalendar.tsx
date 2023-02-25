@@ -1,18 +1,21 @@
 import moment, { months } from 'moment';
 import React, { Dispatch, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Action } from 'redux';
 import { RootState } from '../redux/store';
 import { AiFillCaretLeft, AiFillCaretRight, AiFillCloseCircle } from "react-icons/ai";
 import { addAssignedHour, genAddMonth, removeAssignedHour, setActiveWeek } from '../redux/reducers/monthReducer';
 import { userInterface } from '../redux/reducers/userReducer';
-// import { addNewMonth, setInitalActiveWeekInd } from '../redux/reducers/monthReducer';
+import Notification from './Notifications';
+import { setShowNotification } from '../redux/reducers/notificationReducer';
 
 const WeekDayCalendar: React.FC = () => {
   const dispatch = useDispatch()
-  const { hoursOfDay } = useSelector((state: RootState) => state.month)
   moment.updateLocale('en', { week: { dow: 1 } })
+
+  const {show, msg, danger} = useSelector((state: RootState) => state.notification)
+  const { hoursOfDay } = useSelector((state: RootState) => state.month)
   const { years, activeWeek } = useSelector((state: RootState) => state.month)
+
   let year = activeWeek.format('yyyy')
   let binDay = `${activeWeek.format('DD')}-${activeWeek.format('MMM')}`
 
@@ -39,6 +42,7 @@ const WeekDayCalendar: React.FC = () => {
         assignedUser: user,
         dayMoment: day.date.startOf('week').clone()
       }))
+      dispatch(setShowNotification({message: "User added to slot"}))
     }
   }
 
@@ -56,6 +60,7 @@ const WeekDayCalendar: React.FC = () => {
         dayMoment: day.date.startOf('week').clone(),
         userId: user.id
       }))
+      dispatch(setShowNotification({message: "User removed from slot", danger: true}))
     }
   }
 
@@ -103,6 +108,14 @@ const WeekDayCalendar: React.FC = () => {
           ))}
         </tbody>
       </table>
+
+      <div>
+      {show && (
+        <Notification message={msg} danger={danger} visible={true} onClose={() => {
+          dispatch(setShowNotification({message: "Message is hsown"}))
+        }} />
+      )}
+    </div>
     </div>
   );
 };
