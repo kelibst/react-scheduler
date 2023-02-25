@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 td {
-    @apply w-40 h-20
+    @apply max-w-sm h-20
 }

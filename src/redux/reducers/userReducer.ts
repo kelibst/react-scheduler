@@ -61,11 +61,14 @@ export const counterSlice = createSlice({
     reducers: {
         addUser: (state, action) => {
             state.allUsers = [...state.allUsers, action.payload]
+        }, 
+        removeUser: (state, action) => {
+            state.allUsers = state.allUsers.filter(user => user.id !== action.payload.userId)
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addUser } = counterSlice.actions
+export const { addUser, removeUser } = counterSlice.actions
 
 export default counterSlice.reducer
