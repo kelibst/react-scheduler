@@ -51,7 +51,8 @@ const initialState = {
         phone: "+233546149861",
         isAdmin: false
     }
-    ]
+    ],
+    openUserModal: false
 }
 
 
@@ -64,11 +65,28 @@ export const counterSlice = createSlice({
         }, 
         removeUser: (state, action) => {
             state.allUsers = state.allUsers.filter(user => user.id !== action.payload.userId)
+        },
+        updateUser: (state, action) => {
+            const { userId, name, dob, email, phone, isAdmin } = action.payload;
+            const userIndex = state.allUsers.findIndex(user => user.id === userId);
+            if (userIndex !== -1) {
+                state.allUsers[userIndex] = {
+                    id: userId,
+                    name: name || state.allUsers[userIndex].name,
+                    dob: dob || state.allUsers[userIndex].dob,
+                    email: email || state.allUsers[userIndex].email,
+                    phone: phone || state.allUsers[userIndex].phone,
+                    isAdmin: isAdmin === undefined ? state.allUsers[userIndex].isAdmin : isAdmin,
+                };
+            }
+        },
+        setOpenUserModal: (state) => {
+            state.openUserModal = !state.openUserModal
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addUser, removeUser } = counterSlice.actions
+export const { addUser, removeUser, setOpenUserModal } = counterSlice.actions
 
 export default counterSlice.reducer

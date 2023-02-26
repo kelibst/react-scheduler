@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { addUser } from "../redux/reducers/userReducer";
 
-interface FormData {
+export interface FormData {
     id: string;
     name: string;
     dob: Date;
@@ -12,48 +12,48 @@ interface FormData {
     isAdmin: boolean;
 }
 
-const initialFormData: FormData = {
-    id: uuidv4(),
-    name: "",
-    dob: new Date(),
-    email: "",
-    phone: "",
-    isAdmin: false,
-};
+interface FormDataProps {
+     selectedUser: FormData
+}
 
-const AddUser: React.FC = () => {
-    const [formData, setFormData] = useState(initialFormData);
+const AddUser: React.FC<FormDataProps> = ({selectedUser}) => {
+    const [formData, setFormData] = useState(selectedUser);
     const dispatch = useDispatch()
+    console.log(selectedUser, 'slee')
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
-        const { name, value, type, checked } = e.target;
-        if (name === 'dob' && type === 'date') {
-            // Check if the value is a valid date
-            const dateValue = new Date(value);
-            if (isNaN(dateValue.getTime())) {
-              return;
+    const handleChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+            const { name, value, type, checked } = e.target;
+            if (name === 'dob' && type === 'date') {
+                // Check if the value is a valid date
+                const dateValue = new Date(value);
+                if (isNaN(dateValue.getTime())) {
+                    return;
+                }
             }
-          }
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: type === "checkbox" ? checked : value,
-        }));
-    };
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: type === "checkbox" ? checked : value,
+            }));
+        },
+        []
+    );
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        dispatch(addUser(formData))
-        setFormData( {
-            id: uuidv4(),
-            name: "",
-            dob: new Date(),
-            email: "",
-            phone: "",
-            isAdmin: false,
-        })
-    };
+    const handleSubmit = useCallback(
+        (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            dispatch(addUser(formData))
+            setFormData( {
+                id: uuidv4(),
+                name: "",
+                dob: new Date(),
+                email: "",
+                phone: "",
+                isAdmin: false,
+            })
+        },
+        [formData, dispatch]
+    );
 
     return (
         <div>
