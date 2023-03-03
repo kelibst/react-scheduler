@@ -6,10 +6,10 @@ import { removeUser, setOpenUserModal, userInterface } from '../redux/reducers/u
 import { RootState } from '../redux/store'
 import AddUser from './AddUser'
 import Modal from './Modal'
-import { v4 as uuidv4 } from "uuid";
 
 const UsersList = () => {
     const { allUsers, openUserModal } = useSelector((state: RootState) => state.users)
+    const [selectedUser, setSelectedUser] = useState({})
 
     const dispatch = useDispatch()
     const handleDragStart = (e: any, user: userInterface) => {
@@ -18,6 +18,8 @@ const UsersList = () => {
     const handleDragEnd = () => {
         console.log('drag just end');
     }
+
+    console.log('testing user again');
 
     return (
         <div>
@@ -38,11 +40,12 @@ const UsersList = () => {
 
                                     <button onClick={() => {
                                         dispatch(setOpenUserModal())
+                                        setSelectedUser(user)
                                     }}><AiFillEdit /></button>
                                     <Modal isOpen={openUserModal} onClose={() => {
                                         dispatch(setOpenUserModal())
                                     }}>
-                                        <AddUser selectedUser={user.id} />
+                                        {/* <AddUser selectedUser={selectedUser} /> */}
                                     </Modal>
 
                                 </div>
@@ -57,14 +60,7 @@ const UsersList = () => {
                 <Modal isOpen={openUserModal} onClose={() => {
                     dispatch(setOpenUserModal())
                 }}>
-                    <AddUser selectedUser={{
-                        id: uuidv4(),
-                        name: "",
-                        dob: new Date(),
-                        email: "",
-                        phone: "",
-                        isAdmin: false,
-                    }} />
+                    <AddUser />
                 </Modal>
             </div>
 

@@ -1,10 +1,9 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { addUser } from "../redux/reducers/userReducer";
+import { addUser, setOpenUserModal, updateUser } from "../redux/reducers/userReducer";
 
 export interface FormData {
-    id: string;
     name: string;
     dob: Date;
     email: string;
@@ -12,14 +11,18 @@ export interface FormData {
     isAdmin: boolean;
 }
 
-interface FormDataProps {
-     selectedUser: FormData
-}
 
-const AddUser: React.FC<FormDataProps> = ({selectedUser}) => {
-    const [formData, setFormData] = useState(selectedUser);
+
+const AddUser: React.FC = () => {
+    const [formData, setFormData] = useState({
+        name: "",
+        dob: new Date(),
+        email: "",
+        phone: "",
+        isAdmin: false,
+    });
     const dispatch = useDispatch()
-    console.log(selectedUser, 'slee')
+    console.log(formData, 'slee')
 
     const handleChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -42,9 +45,14 @@ const AddUser: React.FC<FormDataProps> = ({selectedUser}) => {
     const handleSubmit = useCallback(
         (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
+            // if(!update) {
+            //     dispatch(addUser(formData))
+            // } else {
+            //     dispatch(updateUser(formData))
+            // }
             dispatch(addUser(formData))
+            dispatch(setOpenUserModal())
             setFormData( {
-                id: uuidv4(),
                 name: "",
                 dob: new Date(),
                 email: "",
@@ -52,6 +60,7 @@ const AddUser: React.FC<FormDataProps> = ({selectedUser}) => {
                 isAdmin: false,
             })
         },
+        
         [formData, dispatch]
     );
 
@@ -156,6 +165,6 @@ const AddUser: React.FC<FormDataProps> = ({selectedUser}) => {
     );
 };
 
-export default AddUser;
+export default memo(AddUser);
 
 
