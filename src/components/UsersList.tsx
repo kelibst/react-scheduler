@@ -19,7 +19,7 @@ const UsersList = () => {
         console.log('drag just end');
     }
 
-    console.log('testing user again');
+    console.log('testing user again', selectedUser);
 
     return (
         <div>

@@ -16,11 +16,20 @@ export interface dayInterface {
 export interface yearInterface {
     [year: string]: { [week: string]: dayInterface[] }
 }
+export interface monthInterfce  {
+    binDay: string;
+    initalDays: {
+        day: string;
+        date: moment.Moment;
+        assignedHours: never[];
+    }[];
+}[]
 export interface yearContInter { [week: string]: dayInterface[] }
 export interface yearStateInterface {
     years: yearInterface
     activeWeek: moment.Moment,
     hoursOfDay: string[],
+    activeMonth: any[]
 }
 
 moment.updateLocale('en', { week: { dow: 1 } })
@@ -59,12 +68,17 @@ let yearsCont: yearContInter = {}
 monthArray.map(mth => {
     yearsCont[mth.binDay] = mth.initalDays
 })
+let activeWeekMonth = [] 
+monthArray.map(mth => {
+   activeWeekMonth = [...(mth.initalDays)]
+})
 const initialState: yearStateInterface = {
     years: {
         [initalYear]: yearsCont
     },
     activeWeek: moment().startOf('week'),
     hoursOfDay: ["Morning 8am - 2Pm", "Afternoon 2Pm - 8px", "Night 8pm - 8am"],
+    activeMonth: monthArray
     // ['12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm']
 }
 

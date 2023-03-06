@@ -52,7 +52,8 @@ const initialState = {
         isAdmin: false
     }
     ],
-    openUserModal: false
+    openUserModal: false,
+    selectedUser: {}
 }
 
 
@@ -84,6 +85,9 @@ export const counterSlice = createSlice({
                 };
             }
         },
+        setSelectedUser: (state, action) => {
+            state.selectedUser = action.payload
+        },
         setOpenUserModal: (state) => {
             state.openUserModal = !state.openUserModal
         }
@@ -91,6 +95,6 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addUser, removeUser, setOpenUserModal, updateUser } = counterSlice.actions
+export const { addUser, removeUser, setOpenUserModal, updateUser, setSelectedUser } = counterSlice.actions
 
 export default counterSlice.reducer

@@ -6,15 +6,16 @@ import { AiFillCaretLeft, AiFillCaretRight, AiFillCloseCircle } from "react-icon
 import { addAssignedHour, genAddMonth, removeAssignedHour, setActiveWeek } from '../redux/reducers/monthReducer';
 import { userInterface } from '../redux/reducers/userReducer';
 import Notification from './Notifications';
-import { setShowNotification } from '../redux/reducers/notificationReducer';
+import { setShowNotification, setweekView } from '../redux/reducers/notificationReducer';
+import { BsFillCalendar2WeekFill } from "react-icons/bs";
 
 const WeekDayCalendar: React.FC = () => {
   const dispatch = useDispatch()
   moment.updateLocale('en', { week: { dow: 1 } })
 
-  const {show, msg, danger} = useSelector((state: RootState) => state.notification)
+  const {show, msg, danger, weekView} = useSelector((state: RootState) => state.notification)
   const { hoursOfDay } = useSelector((state: RootState) => state.month)
-  const { years, activeWeek } = useSelector((state: RootState) => state.month)
+  const { years, activeWeek, activeMonth } = useSelector((state: RootState) => state.month)
 
   let year = activeWeek.format('yyyy')
   let binDay = `${activeWeek.format('DD')}-${activeWeek.format('MMM')}`
@@ -63,6 +64,9 @@ const WeekDayCalendar: React.FC = () => {
       dispatch(setShowNotification({message: "User removed from slot", danger: true}))
     }
   }
+  console.log(years, 'years')
+  console.log(activeMonth, 'activemonth');
+  
 
   const traverseWeek = (weekMoment: moment.Moment) => {
     let year: string = weekMoment.format('yyyy')
@@ -79,7 +83,10 @@ const WeekDayCalendar: React.FC = () => {
 
   return (
     <div>
-      <div className='border font-bold text-center m-4 p-4'>{activeWeek.format('MMMM')} - {activeWeek.format("YY")}</div>
+      <div className='flex border font-bold text-center m-4 p-4'>{activeWeek.format('MMMM')} - {activeWeek.format("YY")} <div>
+         {weekView && <button onClick={() => dispatch(setweekView())}><BsFillCalendar2WeekFill /> </button> }
+         </div>
+         </div>
       <table className='border'>
         <thead className='border-b'>
           <tr className='border px-2'>
@@ -112,7 +119,7 @@ const WeekDayCalendar: React.FC = () => {
       <div>
       {show && (
         <Notification message={msg} danger={danger} visible={true} onClose={() => {
-          dispatch(setShowNotification({message: "Message is hsown"}))
+          dispatch(setShowNotification({message: "Message is shown"}))
         }} />
       )}
     </div>

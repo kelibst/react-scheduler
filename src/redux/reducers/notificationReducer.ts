@@ -2,13 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 export interface notificationInterface {
     show: boolean,
     msg: string,
-    danger: boolean
+    danger: boolean,
+    weekView: boolean
 }
 
 const initialState: notificationInterface = {
     show: false,
     msg: '',
-    danger: false
+    danger: false,
+    weekView: true
 }
 
 
@@ -22,9 +24,12 @@ export const notificationSlice = createSlice({
         if (action.payload?.danger) {
           state.danger = action.payload.danger
         } 
+      },
+      setweekView: (state) => {
+        state.weekView = !state.weekView
       }
     }
 })
 
-export const { setShowNotification } = notificationSlice.actions
+export const { setShowNotification, setweekView } = notificationSlice.actions
 export default notificationSlice.reducer

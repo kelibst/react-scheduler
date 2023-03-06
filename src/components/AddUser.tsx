@@ -1,7 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
-import { addUser, setOpenUserModal, updateUser } from "../redux/reducers/userReducer";
+import { addUser, setOpenUserModal } from "../redux/reducers/userReducer";
 
 export interface FormData {
     name: string;
@@ -45,11 +44,7 @@ const AddUser: React.FC = () => {
     const handleSubmit = useCallback(
         (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            // if(!update) {
-            //     dispatch(addUser(formData))
-            // } else {
-            //     dispatch(updateUser(formData))
-            // }
+            
             dispatch(addUser(formData))
             dispatch(setOpenUserModal())
             setFormData( {
