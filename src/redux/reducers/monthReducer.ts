@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment';
+import { RootState } from '../store';
 import { userInterface } from './userReducer';
 
 export interface assignedHourInterface {
@@ -61,6 +62,21 @@ const genMonth = (monthMoment: moment.Moment) => {
     return monthArry
 }
 
+const genActiveMonth = (monthMonent: moment.Moment, state: yearInterface) => {
+    let activeMonth = []
+    let year = monthMonent.format('yyyy')
+    console.log(state, 'state')
+    let binDay = `${monthMonent.format('DD')}-${monthMonent.format('MMM')}`
+    // if(!state.years[year])
+    let i = 0
+    while(i < 5) {
+        activeMonth.push(state[year][binDay])
+        i+=1
+        monthMonent.add(1, 'week')
+    }
+    return activeMonth
+}
+
 const motMoment = moment().startOf('month')
 const initalYear = motMoment.format("yyyy")
 const monthArray = genMonth(motMoment)
@@ -68,17 +84,15 @@ let yearsCont: yearContInter = {}
 monthArray.map(mth => {
     yearsCont[mth.binDay] = mth.initalDays
 })
-let activeWeekMonth = [] 
-monthArray.map(mth => {
-   activeWeekMonth = [...(mth.initalDays)]
-})
+
+// let currentActiveMonth = genActiveMonth(motMoment, state)
 const initialState: yearStateInterface = {
     years: {
         [initalYear]: yearsCont
     },
     activeWeek: moment().startOf('week'),
     hoursOfDay: ["Morning 8am - 2Pm", "Afternoon 2Pm - 8px", "Night 8pm - 8am"],
-    activeMonth: monthArray
+    activeMonth: []
     // ['12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm']
 }
 
@@ -125,9 +139,12 @@ export const monthSlice = createSlice({
                 return user.assignedUser.id !== userId
             })
             state.years[year][beginningWeek][Number(index)].assignedHours = assgnedHour
+        },
+        setActiveMonth: (state, action) => {
+            state.activeMonth =action.payload
         }
     }
 })
 
-export const { genAddMonth, setActiveWeek, addAssignedHour, removeAssignedHour } = monthSlice.actions
+export const { genAddMonth, setActiveWeek, addAssignedHour, removeAssignedHour, setActiveMonth } = monthSlice.actions
 export default monthSlice.reducer
