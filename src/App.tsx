@@ -15,7 +15,6 @@ function App() {
   <Provider store={store}>
     <div className="flex">
       <Calendars />
-      <UsersList />
     </div>
       
   </Provider>

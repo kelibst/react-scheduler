@@ -17,7 +17,7 @@ export interface dayInterface {
 export interface yearInterface {
     [year: string]: { [week: string]: dayInterface[] }
 }
-export interface monthInterfce  {
+export interface monthInterfce {
     binDay: string;
     initalDays: {
         day: string;
@@ -65,13 +65,12 @@ const genMonth = (monthMoment: moment.Moment) => {
 const genActiveMonth = (monthMonent: moment.Moment, state: yearInterface) => {
     let activeMonth = []
     let year = monthMonent.format('yyyy')
-    console.log(state, 'state')
     let binDay = `${monthMonent.format('DD')}-${monthMonent.format('MMM')}`
     // if(!state.years[year])
     let i = 0
-    while(i < 5) {
+    while (i < 5) {
         activeMonth.push(state[year][binDay])
-        i+=1
+        i += 1
         monthMonent.add(1, 'week')
     }
     return activeMonth
@@ -109,7 +108,9 @@ export const monthSlice = createSlice({
                 if (!state.years[year]) {
                     state.years[year] = {}
                 }
-                state.years[year][mth.binDay] = mth.initalDays
+                if (!state.years[year][mth.binDay]) {
+                    state.years[year][mth.binDay] = mth.initalDays
+                }
             })
         },
         setActiveWeek: (state, action) => {
@@ -120,7 +121,7 @@ export const monthSlice = createSlice({
             //add user to the assignedHour array on the specify day
             const { index, time, assignedUser, dayMoment } = action.payload
             let year = dayMoment.format('yyyy')
-            let beginningWeek = `${dayMoment.format('DD')}-${dayMoment.format('MMM')}`
+            let beginningWeek = `${dayMoment.startOf('week').format('DD')}-${dayMoment.startOf('week').format('MMM')}`
             // Check if assignedUser already exists in the assignedHours array
             let existingUser = state.years[year][beginningWeek][Number(index)].assignedHours.find(hour => hour.assignedUser.id === assignedUser.id)
 
@@ -141,7 +142,7 @@ export const monthSlice = createSlice({
             state.years[year][beginningWeek][Number(index)].assignedHours = assgnedHour
         },
         setActiveMonth: (state, action) => {
-            state.activeMonth =action.payload
+            state.activeMonth = action.payload
         }
     }
 })

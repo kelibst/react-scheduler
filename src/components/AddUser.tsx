@@ -21,7 +21,6 @@ const AddUser: React.FC = () => {
         isAdmin: false,
     });
     const dispatch = useDispatch()
-    console.log(formData, 'slee')
 
     const handleChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
