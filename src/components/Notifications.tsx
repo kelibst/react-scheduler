@@ -29,14 +29,14 @@ const Notification: React.FC<NotificationProps> = ({ message, visible, onClose, 
     "shadow-lg",
     "transition-all",
     "font-bold",
+    "bg-green-500",
     {
       "opacity-0": !visible,
       "translate-y-full": !visible,
-      "bg-green-500": !danger,
-      "bg-red-500": danger
+      // "bg-green-500": !danger,
+      // "bg-red-500": danger
     }
   );
-
   return ReactDOM.createPortal(
     <div className={notificationClasses}>
       <p>{message}</p>

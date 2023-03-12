@@ -28,7 +28,7 @@ const WeekDayCalendar: React.FC = () => {
   const dispatch = useDispatch()
   moment.updateLocale('en', { week: { dow: 1 } })
 
-  const { show, msg, danger, weekView } = useSelector((state: RootState) => state.notification)
+  const { weekView } = useSelector((state: RootState) => state.notification)
   const { hoursOfDay } = useSelector((state: RootState) => state.month)
   const { years, activeWeek, activeMonth } = useSelector((state: RootState) => state.month)
 
@@ -58,7 +58,7 @@ const WeekDayCalendar: React.FC = () => {
         assignedUser: user,
         dayMoment: day.date.clone()
       }))
-      dispatch(setShowNotification({ message: "User added to slot" }))
+      dispatch(setShowNotification({ message: "User added to slot" , danger: false}))
     }
   }
 
@@ -114,14 +114,6 @@ const WeekDayCalendar: React.FC = () => {
           ))}
         </tbody>
       </table>
-      <UsersList />
-      <div>
-        {show && (
-          <Notification message={msg} danger={danger} visible={true} onClose={() => {
-            dispatch(setShowNotification({ message: "Message is shown" }))
-          }} />
-        )}
-      </div>
     </div>
   );
 };
