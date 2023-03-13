@@ -82,20 +82,10 @@ const WeekDayCalendar: React.FC = () => {
 
   return (
     <div className='grid'>
-      <div className='flex justify-center align-middle border font-bold text-center m-4 p-4'>{activeWeek.format('MMMM')} - {activeWeek.format("YY")} <div>
-        {weekView && <button onClick={() => dispatch(setweekView())}><BsFillCalendar2WeekFill /> </button>}
-      </div>
-      </div>
       <table className='border'>
         <thead className='border-b'>
           <tr className='border px-2'>
-            <th><button onClick={() => {
-              traverseWeek(activeWeek.subtract(1, 'week'), years, dispatch)
-            }}><AiFillCaretLeft /> </button>Days
-              <button onClick={() => {
-                traverseWeek(activeWeek.add(1, 'week'), years, dispatch)
-              }}><AiFillCaretRight /> </button>
-            </th>
+            <th>Days</th>
             {hoursOfDay.map(hour => <th className='p-2 border font-bold' key={hour}>{hour}</th>)}
           </tr>
         </thead>

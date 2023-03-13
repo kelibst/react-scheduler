@@ -10,6 +10,30 @@ import { setShowNotification, setweekView } from '../redux/reducers/notification
 import { BsFillCalendar2WeekFill } from 'react-icons/bs';
 import { traverseWeek } from './WeekDayCalendar';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { AnyAction } from 'redux';
+
+export  const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface, dispatch:  Dispatch<AnyAction>) => {
+  let activeMonth = []
+  let year = monthMonent.format('yyyy')
+  monthMonent = monthMonent.clone().startOf('month')
+
+  let binDay = `${monthMonent.clone().startOf('week').format('DD')}-${monthMonent.clone().startOf('week').format('MMM')}`
+  let lastDay = `${monthMonent.clone().endOf('month').startOf('week').format('DD')}-${monthMonent.clone().endOf('month').startOf('week').format('MMM')}`
+  //if the needed month or beginning and ending week is not available it generates that and moves on
+
+  if (!years[year] || !years[year][binDay] || !years[year][lastDay]) {
+    dispatch(genAddMonth({ monthMoment: monthMonent }))
+  }
+  let i = 0
+  while (i < 5) {
+    binDay = `${monthMonent.startOf('week').format('DD')}-${monthMonent.startOf('week').format('MMM')}`
+    activeMonth.push(years[year][binDay])
+    i += 1
+    monthMonent.add(1, 'week')
+  }
+
+  return activeMonth
+}
 
 const MonthCalendar: React.FC = () => {
   const dispatch = useDispatch()
@@ -25,53 +49,15 @@ const MonthCalendar: React.FC = () => {
 
 
 
-  const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface) => {
-    let activeMonth = []
-    let year = monthMonent.format('yyyy')
-    monthMonent = monthMonent.clone().startOf('month')
-
-    let binDay = `${monthMonent.clone().startOf('week').format('DD')}-${monthMonent.clone().startOf('week').format('MMM')}`
-    let lastDay = `${monthMonent.clone().endOf('month').startOf('week').format('DD')}-${monthMonent.clone().endOf('month').startOf('week').format('MMM')}`
-    //if the needed month or beginning and ending week is not available it generates that and moves on
-
-    if (!years[year] || !years[year][binDay] || !years[year][lastDay]) {
-      dispatch(genAddMonth({ monthMoment: monthMonent }))
-    }
-    let i = 0
-    while (i < 5) {
-      binDay = `${monthMonent.startOf('week').format('DD')}-${monthMonent.startOf('week').format('MMM')}`
-      activeMonth.push(years[year][binDay])
-      i += 1
-      monthMonent.add(1, 'week')
-    }
-
-    return activeMonth
-  }
+ 
 
 
   useEffect(() => {
-    const newactiveMonth = genActiveMonth(activeWeek.clone(), years)
+    const newactiveMonth = genActiveMonth(activeWeek.clone(), years, dispatch)
     dispatch(setActiveMonth(newactiveMonth))
   }, [])
   return (
     <div>
-      <div className='flex justify-center align-middle border font-bold text-center m-4 p-4'>
-        <button onClick={() => {
-          const newactiveMonth = genActiveMonth(activeWeek.clone().subtract(1, 'month'), years)
-          traverseWeek(activeWeek.subtract(1, 'month').startOf('week'), years, dispatch)
-          dispatch(setActiveMonth(newactiveMonth))
-        }}><AiFillCaretLeft />
-        </button>
-        {activeWeek.format('MMMM')} - {activeWeek.format("YY")}
-        <div>
-          {weekView === false && <button onClick={() => dispatch(setweekView())}><BsFillCalendar2WeekFill /> </button>}
-        </div>
-        <button onClick={() => {
-          const newactiveMonth = genActiveMonth(activeWeek.clone().add(1, 'month'), years)
-          dispatch(setActiveMonth(newactiveMonth))
-          traverseWeek(activeWeek.add(1, 'month').startOf('week'), years, dispatch)
-        }}><AiFillCaretRight /> </button>
-      </div>
       <table className='border' ref={tableRef}>
         <thead>
           <tr className='border'>

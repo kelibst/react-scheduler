@@ -24,7 +24,7 @@ const UsersList = () => {
         <div>
             {allUsers.length > 0 && (
                 <div className='my-4 max-w-sm'>
-                    <h3 className='font-bold'>Duty Rooster List</h3>
+                    <h3 className='font-bold'>Duty Roster List</h3>
                     <ul>
                         {allUsers.map(
                             (user) => <div key={user.id} onDragEnd={handleDragEnd}
