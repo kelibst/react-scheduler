@@ -5,7 +5,7 @@ const Actions = () => {
   return (
     <div className='relative right-10'>
         <button onClick={() => setShowAction(!showAction)} className='px-4 bottom-2 rounded-lg border-blue-500 font-bold border'>Actions</button>
-        {showAction && <div className="fixed bg-gray-100 shadow-md p-4">
+        {showAction && <div className="fixed bg-white shadow-lg p-4">
             <div>Download Week</div>
             <div>Download Month</div>
         </div>}

@@ -32,7 +32,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <div
-        className={`fixed shadow-md h-full bg-gray-100 text-black w-64 p-4 transition-all duration-300 ease-in-out ${sidebarOpen ? 'left-0' : '-left-64'
+        className={`fixed bg-gray-100 shadow-md h-full text-black w-64 p-4 transition-all duration-300 ease-in-out ${sidebarOpen ? 'left-0' : '-left-64'
           }`}
       >
         <div className="flex justify-between items-center mb-8">

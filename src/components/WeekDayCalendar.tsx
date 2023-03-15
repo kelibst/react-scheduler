@@ -48,8 +48,6 @@ const WeekDayCalendar: React.FC = () => {
       column = closestParent.getAttribute("data-column");
       dataIndex = closestParent.getAttribute("data-index");
       currentDayofWeek = closestParent.parentElement.firstChild.textContent.split(' ')[0]
-
-
       let day = week.find(day => day.day === currentDayofWeek)
       if (!day || !dataIndex) return;
       dispatch(addAssignedHour({

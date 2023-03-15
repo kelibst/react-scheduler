@@ -50,6 +50,7 @@ const MonthCalendar: React.FC = () => {
 
 
  
+console.log(activeMonth, 'activemonth');
 
 
   useEffect(() => {
@@ -74,24 +75,33 @@ const MonthCalendar: React.FC = () => {
           </tr>
         </thead>
         <tbody className='m-2 p-2'>
-          {hoursOfDay.map((hour, index) => (
-            <tr key={index} className='border'>
-              <td className='p-2 m-2'>{hour}</td>
-              {activeMonth.map((week, ind) => {
-                return week?.map((day: any, dayIndex: number) => (
-                  <td key={`${index}-${dayIndex}`} className='border p-3'>
-                    {day?.assignedHours?.map((assignedHour: any, ind: number) => (
-                      <div className="bg-gray-100 relative my-2 rounded-md px-3 text-bold" key={assignedHour.assignedUser.name}>
-                        <span className='font-medium'>{assignedHour.assignedUser.name}</span>  <span className='absolute top-0 right-0'> <AiFillCloseCircle /></span></div>
-                    ))}
-                  </td>
-                ))
-              })}
-            </tr>
-          ))}
+        {hoursOfDay.map((hour, hourIndex) => (
+  <tr key={hourIndex} className='border'>
+    <td className='p-2 m-2'>{hour}</td>
+    {activeMonth.map((week, ind) => {
+  return week?.map((day: any, dayIndex: number) => (
+    <td key={`${'dsom'}-${dayIndex}`} className='border p-3'>
+      {day?.assignedHours
+        ?.filter((assignedHour: any) => assignedHour.time === hour)
+        .map((assignedHour: any, ind: number) => (
+          <div className="bg-gray-100 relative my-2 rounded-md px-3 text-bold" key={assignedHour.assignedUser.name}>
+            <span className='font-medium'>
+              {assignedHour.assignedUser.name}
+            </span>
+            <span className='absolute top-0 right-0'>
+              <AiFillCloseCircle />
+            </span>
+          </div>
+        ))}
+    </td>
+  ))
+})}
+
+  </tr>
+))}
+
         </tbody>
       </table>
-
       <DownloadTableExcel
         filename="data table"
         sheet="data"
