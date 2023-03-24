@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, MutableRefObject, ReactNode, useState } from 'react';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,11 +10,14 @@ import { traverseWeek } from '../WeekDayCalendar';
 import Actions from './Actions';
 import SelectField from './SelectField';
 
-interface LayoutProps {
-  children: React.ReactNode;
+export interface LayoutProps {
+  children: ReactNode;
+  monthtableRef: MutableRefObject<null>;
+  weekRef: MutableRefObject<null>
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+const Layout: FC<LayoutProps> = (props) => {
+  const {children } = props
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedOption, setSelectedOption] = useState('Week');
   const dispatch = useDispatch()
@@ -40,15 +43,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         </div>
         <ul>
           <li>
-            <a href="#" className="block font-bold p-2">
+            <a href="https://prmministries.org/" className="block font-bold p-2">
               Home
             </a>
           </li>
-          <li>
+          {/* <li>
             <a href="#" className="block font-bold p-2">
               Dashboard
             </a>
-          </li>
+          </li> */}
           <UsersList />
         </ul>
       </div>
@@ -78,21 +81,23 @@ const Layout: FC<LayoutProps> = ({ children }) => {
                 const newactiveMonth = genActiveMonth(activeWeek.clone().subtract(1, 'month'), years, dispatch)
                 dispatch(setActiveMonth(newactiveMonth))
                 traverseWeek(activeWeek.subtract(1, 'month').startOf('week'), years, dispatch)
+              }else {
+                 traverseWeek(activeWeek.subtract(1, 'week'), years, dispatch)
               }
-              traverseWeek(activeWeek.subtract(1, 'week'), years, dispatch)
             }}><AiFillCaretLeft />
             </button>
             <span>{activeWeek.format('MMM')} - {activeWeek.format("YY")}</span>
             <button onClick={() => {
               if (!weekView) {
-                const newactiveMonth = genActiveMonth(activeWeek.clone().add(1, 'month'), years, dispatch)
-                dispatch(setActiveMonth(newactiveMonth))
-                traverseWeek(activeWeek.add(1, 'month').startOf('week'), years, dispatch)
-              }
-              traverseWeek(activeWeek.add(1, 'week'), years, dispatch)
+                const newactiveMonth = genActiveMonth(activeWeek.clone().add(1, 'month'), years, dispatch)                
+                newactiveMonth[0]?.length && dispatch(setActiveMonth(newactiveMonth))
+                newactiveMonth[0]?.length && traverseWeek(activeWeek.add(1, 'month').startOf('week'), years, dispatch)
+              }else {
+               traverseWeek(activeWeek.add(1, 'week'), years, dispatch) 
+              } 
             }}><AiFillCaretRight /> </button>
           </div>
-          <Actions />
+          <Actions {...props}/>
         </div>
         {/* Content */}
         <div className={`flex-1 p-4 ${!sidebarOpen ? 'w-full' : ''}`}>{children}</div>

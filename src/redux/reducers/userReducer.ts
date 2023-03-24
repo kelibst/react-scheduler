@@ -12,45 +12,45 @@ export interface userInterface {
 const initialState = {
     allUsers: [{
         id: uuidv4(),
-        name: "keli",
+        name: "keli Booster",
         dob: new Date(),
         email: 'kbooster12@gmail.com',
         phone: "+233546149861",
         isAdmin: false
     },
-    {
-        id: uuidv4(),
-        name: "Francis Denis",
-        dob: new Date(),
-        email: 'kbooste212@gmail.com',
-        phone: "+233546149861",
-        isAdmin: false
-    },
-    {
-        id: uuidv4(),
-        name: "Felix Annor",
-        dob: new Date(),
-        email: 'kbooste212@gmail.com',
-        phone: "+233546149861",
-        isAdmin: false
-    }
-        ,
-    {
-        id: uuidv4(),
-        name: "Fred Gbator",
-        dob: new Date(),
-        email: 'kbooste212@gmail.com',
-        phone: "+233546149861",
-        isAdmin: false
-    },
-    {
-        id: uuidv4(),
-        name: "Frat Edwin",
-        dob: new Date(),
-        email: 'kbooste212@gmail.com',
-        phone: "+233546149861",
-        isAdmin: false
-    }
+    // {
+    //     id: uuidv4(),
+    //     name: "Francis Denis",
+    //     dob: new Date(),
+    //     email: 'kbooste212@gmail.com',
+    //     phone: "+233546149861",
+    //     isAdmin: false
+    // },
+    // {
+    //     id: uuidv4(),
+    //     name: "Felix Annor",
+    //     dob: new Date(),
+    //     email: 'kbooste212@gmail.com',
+    //     phone: "+233546149861",
+    //     isAdmin: false
+    // }
+    //     ,
+    // {
+    //     id: uuidv4(),
+    //     name: "Fred Gbator",
+    //     dob: new Date(),
+    //     email: 'kbooste212@gmail.com',
+    //     phone: "+233546149861",
+    //     isAdmin: false
+    // },
+    // {
+    //     id: uuidv4(),
+    //     name: "Frat Edwin",
+    //     dob: new Date(),
+    //     email: 'kbooste212@gmail.com',
+    //     phone: "+233546149861",
+    //     isAdmin: false
+    // }
     ],
     openUserModal: false,
     selectedUser: {}

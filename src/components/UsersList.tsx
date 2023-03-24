@@ -23,8 +23,8 @@ const UsersList = () => {
     return (
         <div>
             {allUsers.length > 0 && (
-                <div className='my-4 max-w-sm'>
-                    <h3 className='font-bold'>Duty Roster List</h3>
+                <div className='my-4 ml-2 max-w-sm'>
+                    <h3 className='font-bold mb-4'>Duty Roster List</h3>
                     <ul>
                         {allUsers.map(
                             (user) => <div key={user.id} onDragEnd={handleDragEnd}
@@ -44,7 +44,6 @@ const UsersList = () => {
                                     <Modal isOpen={openUserModal} onClose={() => {
                                         dispatch(setOpenUserModal())
                                     }}>
-                                        {/* <AddUser selectedUser={selectedUser} /> */}
                                     </Modal>
 
                                 </div>
@@ -52,10 +51,10 @@ const UsersList = () => {
                     </ul>
                 </div>)
             }
-            <div>
-                <button onClick={() => {
+            <div className='mt-4'>
+                <button className='ml-4 font-bold px-6 py-2 rounded-lg bg-green-600 text-xs text-white' onClick={() => {
                     dispatch(setOpenUserModal())
-                }}>Add A new User</button>
+                }}>Add Staff</button>
                 <Modal isOpen={openUserModal} onClose={() => {
                     dispatch(setOpenUserModal())
                 }}>

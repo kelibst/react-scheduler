@@ -1,18 +1,19 @@
 import moment, { months } from 'moment';
-import React, { Dispatch, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { AiFillCaretLeft, AiFillCaretRight, AiFillCloseCircle } from "react-icons/ai";
 import { addAssignedHour, genAddMonth, removeAssignedHour, setActiveMonth, setActiveWeek, yearInterface } from '../redux/reducers/monthReducer';
 import { userInterface } from '../redux/reducers/userReducer';
-import Notification from './Notifications';
-import { setShowNotification, setweekView } from '../redux/reducers/notificationReducer';
-import { BsFillCalendar2WeekFill } from 'react-icons/bs';
-import { traverseWeek } from './WeekDayCalendar';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { AnyAction } from 'redux';
+import { HomeProps } from './Home';
 
-export  const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface, dispatch:  Dispatch<AnyAction>) => {
+interface monthTableRefInter {
+  monthTableRef: MutableRefObject<null>
+}
+
+export const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface, dispatch: Dispatch<AnyAction>) => {
   let activeMonth = []
   let year = monthMonent.format('yyyy')
   monthMonent = monthMonent.clone().startOf('month')
@@ -35,10 +36,11 @@ export  const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface
   return activeMonth
 }
 
-const MonthCalendar: React.FC = () => {
+const MonthCalendar: FC<monthTableRefInter> = ({ monthTableRef }) => {
+  console.log(monthTableRef, 'monthrab');
+  
   const dispatch = useDispatch()
   moment.updateLocale('en', { week: { dow: 1 } })
-  const tableRef = useRef(null);
 
   const { show, msg, danger, weekView } = useSelector((state: RootState) => state.notification)
   const { hoursOfDay } = useSelector((state: RootState) => state.month)
@@ -46,20 +48,17 @@ const MonthCalendar: React.FC = () => {
 
   let year = activeWeek.format('yyyy')
   let binDay = `${activeWeek.format('DD')}-${activeWeek.format('MMM')}`
-
-
-
- 
-console.log(activeMonth, 'activemonth');
-
+  console.log(activeMonth, 'activemonth');
+  
 
   useEffect(() => {
     const newactiveMonth = genActiveMonth(activeWeek.clone(), years, dispatch)
     dispatch(setActiveMonth(newactiveMonth))
   }, [])
+
   return (
     <div>
-      <table className='border' ref={tableRef}>
+      <table className='border' ref={monthTableRef}>
         <thead>
           <tr className='border'>
             <th className='p-2 m-2'>Hours of Day</th>
@@ -75,40 +74,33 @@ console.log(activeMonth, 'activemonth');
           </tr>
         </thead>
         <tbody className='m-2 p-2'>
-        {hoursOfDay.map((hour, hourIndex) => (
-  <tr key={hourIndex} className='border'>
-    <td className='p-2 m-2'>{hour}</td>
-    {activeMonth.map((week, ind) => {
-  return week?.map((day: any, dayIndex: number) => (
-    <td key={`${'dsom'}-${dayIndex}`} className='border p-3'>
-      {day?.assignedHours
-        ?.filter((assignedHour: any) => assignedHour.time === hour)
-        .map((assignedHour: any, ind: number) => (
-          <div className="bg-gray-100 relative my-2 rounded-md px-3 text-bold" key={assignedHour.assignedUser.name}>
-            <span className='font-medium'>
-              {assignedHour.assignedUser.name}
-            </span>
-            <span className='absolute top-0 right-0'>
-              <AiFillCloseCircle />
-            </span>
-          </div>
-        ))}
-    </td>
-  ))
-})}
+          {hoursOfDay.map((hour, hourIndex) => (
+            <tr key={hourIndex} className='border'>
+              <td className='p-2 m-2'>{hour}</td>
+              {activeMonth.map((week, ind) => {
+                return week?.map((day: any, dayIndex: number) => (
+                  <td key={`${'dsom'}-${dayIndex}`} className='border p-3'>
+                    {day?.assignedHours
+                      ?.filter((assignedHour: any) => assignedHour.time === hour)
+                      .map((assignedHour: any, ind: number) => (
+                        <div className="bg-gray-100 relative my-2 rounded-md px-3 text-bold" key={assignedHour.assignedUser.name}>
+                          <span className='font-medium'>
+                            {assignedHour.assignedUser.name}
+                          </span>
+                          <span className='absolute top-0 right-0'>
+                            <AiFillCloseCircle />
+                          </span>
+                        </div>
+                      ))}
+                  </td>
+                ))
+              })}
 
-  </tr>
-))}
+            </tr>
+          ))}
 
         </tbody>
       </table>
-      <DownloadTableExcel
-        filename="data table"
-        sheet="data"
-        currentTableRef={tableRef.current}
-      >
-        <button> Export excel </button>
-      </DownloadTableExcel>
     </div>
   );
 };
