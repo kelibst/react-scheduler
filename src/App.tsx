@@ -1,17 +1,18 @@
-import { Provider } from "react-redux";
+import { useRef, useState } from "react";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import './App.css'
-import UsersList from "./components/UsersList";
-import WeekDayCalendar from "./components/WeekDayCalendar";
-import { store } from './redux/store'
+import Calendars from "./components/Calendars";
+import Home from "./components/Home";
+
+import { RootState, store } from './redux/store'
 
 function App() {
- 
+  const monthtableRef = useRef(null);
+  const weekRef = useRef(null)
   return (
   <Provider store={store}>
-      <WeekDayCalendar />
-      <UsersList />
+   <Home {...{monthtableRef, weekRef}}/>   
   </Provider>
-    
   )
 }
 
