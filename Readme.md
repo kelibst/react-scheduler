@@ -43,6 +43,10 @@ git clone https://github.com/kelibst/lihouses-react.git
 - visit http://127.0.0.1:3000/
 - You can also visit [live](https://lihouses-react.herokuapp.com/) version for the full appp
 
+## Rooms for improvement
+- Allow user to rewrite the working hours
+- 
+
 
 ## Authors
 
