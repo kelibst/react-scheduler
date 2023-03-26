@@ -1,13 +1,11 @@
-import moment, { months } from 'moment';
-import React, { Dispatch, FC, MutableRefObject, useEffect, useRef, useState } from 'react';
+import moment from 'moment';
+import { Dispatch, FC, MutableRefObject, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { AiFillCaretLeft, AiFillCaretRight, AiFillCloseCircle } from "react-icons/ai";
-import { addAssignedHour, genAddMonth, removeAssignedHour, setActiveMonth, setActiveWeek, yearInterface } from '../redux/reducers/monthReducer';
-import { userInterface } from '../redux/reducers/userReducer';
-import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { AiFillCloseCircle } from "react-icons/ai";
+import { genAddMonth, setActiveMonth, yearInterface } from '../redux/reducers/monthReducer';
+
 import { AnyAction } from 'redux';
-import { HomeProps } from './Home';
 
 interface monthTableRefInter {
   monthTableRef: MutableRefObject<null>
@@ -19,11 +17,13 @@ export const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface,
   monthMonent = monthMonent.clone().startOf('month')
 
   let binDay = `${monthMonent.clone().startOf('week').format('DD')}-${monthMonent.clone().startOf('week').format('MMM')}`
-  let lastDay = `${monthMonent.clone().endOf('month').startOf('week').format('DD')}-${monthMonent.clone().endOf('month').startOf('week').format('MMM')}`
+  let lastDay = `${monthMonent.clone().endOf('month').subtract(1, 'week').startOf('week').format('DD')}-${monthMonent.clone().endOf('month').subtract(1, 'week').startOf('week').format('MMM')}`
   //if the needed month or beginning and ending week is not available it generates that and moves on
 
-  if (!years[year] || !years[year][binDay] || !years[year][lastDay]) {
+  if (!years[year] || !years[year][binDay] || !years[year][lastDay]) {    
     dispatch(genAddMonth({ monthMoment: monthMonent }))
+    console.log('hiting', binDay, lastDay)
+    return
   }
   let i = 0
   while (i < 5) {
@@ -32,12 +32,12 @@ export const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface,
     i += 1
     monthMonent.add(1, 'week')
   }
-
+  console.log(activeMonth,'activemonth');
+  
   return activeMonth
 }
 
 const MonthCalendar: FC<monthTableRefInter> = ({ monthTableRef }) => {
-  console.log(monthTableRef, 'monthrab');
   
   const dispatch = useDispatch()
   moment.updateLocale('en', { week: { dow: 1 } })
@@ -48,13 +48,14 @@ const MonthCalendar: FC<monthTableRefInter> = ({ monthTableRef }) => {
 
   let year = activeWeek.format('yyyy')
   let binDay = `${activeWeek.format('DD')}-${activeWeek.format('MMM')}`
-  console.log(activeMonth, 'activemonth');
-  
+  console.log(years[year], 'year')
 
   useEffect(() => {
     const newactiveMonth = genActiveMonth(activeWeek.clone(), years, dispatch)
-    dispatch(setActiveMonth(newactiveMonth))
+    newactiveMonth &&  newactiveMonth[0].length &&  dispatch(setActiveMonth(newactiveMonth))
   }, [])
+
+  
 
   return (
     <div>

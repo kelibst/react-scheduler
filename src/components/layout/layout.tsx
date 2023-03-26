@@ -47,11 +47,6 @@ const Layout: FC<LayoutProps> = (props) => {
               Home
             </a>
           </li>
-          {/* <li>
-            <a href="#" className="block font-bold p-2">
-              Dashboard
-            </a>
-          </li> */}
           <UsersList />
         </ul>
       </div>
@@ -79,8 +74,8 @@ const Layout: FC<LayoutProps> = (props) => {
             <button onClick={() => {
               if (!weekView) {
                 const newactiveMonth = genActiveMonth(activeWeek.clone().subtract(1, 'month'), years, dispatch)
-                dispatch(setActiveMonth(newactiveMonth))
-                traverseWeek(activeWeek.subtract(1, 'month').startOf('week'), years, dispatch)
+                newactiveMonth && newactiveMonth[0]?.length && dispatch(setActiveMonth(newactiveMonth))
+                newactiveMonth && newactiveMonth[0]?.length && traverseWeek(activeWeek.subtract(1, 'month').startOf('week'), years, dispatch)
               }else {
                  traverseWeek(activeWeek.subtract(1, 'week'), years, dispatch)
               }
@@ -89,9 +84,11 @@ const Layout: FC<LayoutProps> = (props) => {
             <span>{activeWeek.format('MMM')} - {activeWeek.format("YY")}</span>
             <button onClick={() => {
               if (!weekView) {
-                const newactiveMonth = genActiveMonth(activeWeek.clone().add(1, 'month'), years, dispatch)                
-                newactiveMonth[0]?.length && dispatch(setActiveMonth(newactiveMonth))
-                newactiveMonth[0]?.length && traverseWeek(activeWeek.add(1, 'month').startOf('week'), years, dispatch)
+                const newactiveMonth = genActiveMonth(activeWeek.clone().add(1, 'month'), years, dispatch)  
+                console.log(newactiveMonth, 'newactivemotn');
+                
+                newactiveMonth &&  newactiveMonth[3]?.length && dispatch(setActiveMonth(newactiveMonth))
+                newactiveMonth && newactiveMonth[3]?.length && traverseWeek(activeWeek.add(1, 'month').startOf('week'), years, dispatch)
               }else {
                traverseWeek(activeWeek.add(1, 'week'), years, dispatch) 
               } 

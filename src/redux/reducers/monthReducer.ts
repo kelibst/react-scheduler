@@ -62,19 +62,19 @@ const genMonth = (monthMoment: moment.Moment) => {
     return monthArry
 }
 
-const genActiveMonth = (monthMonent: moment.Moment, state: yearInterface) => {
-    let activeMonth = []
-    let year = monthMonent.format('yyyy')
-    let binDay = `${monthMonent.format('DD')}-${monthMonent.format('MMM')}`
-    // if(!state.years[year])
-    let i = 0
-    while (i < 5) {
-        activeMonth.push(state[year][binDay])
-        i += 1
-        monthMonent.add(1, 'week')
-    }
-    return activeMonth
-}
+// const genActiveMonth = (monthMonent: moment.Moment, state: yearInterface) => {
+//     let activeMonth = []
+//     let year = monthMonent.format('yyyy')
+//     let binDay = `${monthMonent.format('DD')}-${monthMonent.format('MMM')}`
+//     // if(!state.years[year])
+//     let i = 0
+//     while (i < 5) {
+//         activeMonth.push(state[year][binDay])
+//         i += 1
+//         monthMonent.add(1, 'week')
+//     }
+//     return activeMonth
+// }
 
 const motMoment = moment().startOf('month')
 const initalYear = motMoment.format("yyyy")
@@ -104,10 +104,12 @@ export const monthSlice = createSlice({
             const { monthMoment } = action.payload
             let year = monthMoment.format('yyyy')
             const monthArray = genMonth(monthMoment)
+            
             monthArray.map(mth => {
                 if (!state.years[year]) {
                     state.years[year] = {}
                 }
+                
                 if (!state.years[year][mth.binDay]) {
                     state.years[year][mth.binDay] = mth.initalDays
                 }
