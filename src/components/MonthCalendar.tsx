@@ -22,7 +22,6 @@ export const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface,
 
   if (!years[year] || !years[year][binDay] || !years[year][lastDay]) {    
     dispatch(genAddMonth({ monthMoment: monthMonent }))
-    console.log('hiting', binDay, lastDay)
     return
   }
   let i = 0
@@ -31,9 +30,7 @@ export const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface,
     activeMonth.push(years[year][binDay])
     i += 1
     monthMonent.add(1, 'week')
-  }
-  console.log(activeMonth,'activemonth');
-  
+  }  
   return activeMonth
 }
 
@@ -42,13 +39,12 @@ const MonthCalendar: FC<monthTableRefInter> = ({ monthTableRef }) => {
   const dispatch = useDispatch()
   moment.updateLocale('en', { week: { dow: 1 } })
 
-  const { show, msg, danger, weekView } = useSelector((state: RootState) => state.notification)
+  // const { show, msg, danger, weekView } = useSelector((state: RootState) => state.notification)
   const { hoursOfDay } = useSelector((state: RootState) => state.month)
   const { years, activeWeek, activeMonth } = useSelector((state: RootState) => state.month)
 
-  let year = activeWeek.format('yyyy')
-  let binDay = `${activeWeek.format('DD')}-${activeWeek.format('MMM')}`
-  console.log(years[year], 'year')
+  // let year = activeWeek.format('yyyy')
+  // let binDay = `${activeWeek.format('DD')}-${activeWeek.format('MMM')}`
 
   useEffect(() => {
     const newactiveMonth = genActiveMonth(activeWeek.clone(), years, dispatch)

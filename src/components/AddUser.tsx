@@ -28,16 +28,13 @@ const AddUser: FC<AddUserProps> = (props) => {
         isAdmin: user.isAdmin || false,
     });
     const dispatch = useDispatch()
-    console.log(props, 'usedata');
 
     const handleChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             const { name, value, type, checked } = e.target;
             if (name === 'dob' && type === 'date') {
                 // Check if the value is a valid date
-                const dateValue = new Date(value);
-                console.log(dateValue);
-                
+                const dateValue = new Date(value);                
                 if (isNaN(dateValue.getTime())) {
                     return;
                 }

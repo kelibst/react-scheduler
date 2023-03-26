@@ -84,9 +84,7 @@ const Layout: FC<LayoutProps> = (props) => {
             <span>{activeWeek.format('MMM')} - {activeWeek.format("YY")}</span>
             <button onClick={() => {
               if (!weekView) {
-                const newactiveMonth = genActiveMonth(activeWeek.clone().add(1, 'month'), years, dispatch)  
-                console.log(newactiveMonth, 'newactivemotn');
-                
+                const newactiveMonth = genActiveMonth(activeWeek.clone().add(1, 'month'), years, dispatch)                  
                 newactiveMonth &&  newactiveMonth[3]?.length && dispatch(setActiveMonth(newactiveMonth))
                 newactiveMonth && newactiveMonth[3]?.length && traverseWeek(activeWeek.add(1, 'month').startOf('week'), years, dispatch)
               }else {
