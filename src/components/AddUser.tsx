@@ -1,6 +1,7 @@
-import React, { memo, useCallback, useState } from "react";
+import { isFulfilled } from "@reduxjs/toolkit";
+import React, { Dispatch, FC, memo, SetStateAction, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addUser, setOpenUserModal } from "../redux/reducers/userReducer";
+import { addUser, setOpenUserModal, updateUser } from "../redux/reducers/userReducer";
 
 export interface FormData {
     name: string;
@@ -10,15 +11,21 @@ export interface FormData {
     isAdmin: boolean;
 }
 
+export interface AddUserProps {
+    user: any,
+    setSelectedUser: Dispatch<SetStateAction<{}>>
+}
 
 
-const AddUser: React.FC = () => {
+
+const AddUser: FC<AddUserProps> = (props) => {
+    const { user, setSelectedUser } = props
     const [formData, setFormData] = useState({
-        name: "",
-        dob: new Date(),
-        email: "",
-        phone: "",
-        isAdmin: false,
+        name: user.name || "",
+        dob: user.dob || new Date(),
+        email: user.email || "",
+        phone: user.phone || "",
+        isAdmin: user.isAdmin || false,
     });
     const dispatch = useDispatch()
 
@@ -27,7 +34,7 @@ const AddUser: React.FC = () => {
             const { name, value, type, checked } = e.target;
             if (name === 'dob' && type === 'date') {
                 // Check if the value is a valid date
-                const dateValue = new Date(value);
+                const dateValue = new Date(value);                
                 if (isNaN(dateValue.getTime())) {
                     return;
                 }
@@ -43,18 +50,30 @@ const AddUser: React.FC = () => {
     const handleSubmit = useCallback(
         (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            
-            dispatch(addUser(formData))
-            dispatch(setOpenUserModal())
-            setFormData( {
-                name: "",
-                dob: new Date(),
-                email: "",
-                phone: "",
-                isAdmin: false,
-            })
+            if (user.name) {
+                dispatch(updateUser({...formData, userId: user.id}))
+                dispatch(setOpenUserModal())
+                setFormData({
+                    name: "",
+                    dob: new Date(),
+                    email: "",
+                    phone: "",
+                    isAdmin: false,
+                })
+                setSelectedUser({})
+            }else {
+                dispatch(addUser(formData))
+                dispatch(setOpenUserModal())
+                setFormData({
+                    name: "",
+                    dob: new Date(),
+                    email: "",
+                    phone: "",
+                    isAdmin: false,
+                })
+            }
         },
-        
+
         [formData, dispatch]
     );
 

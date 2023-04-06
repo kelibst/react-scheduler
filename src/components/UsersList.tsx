@@ -15,6 +15,13 @@ const UsersList = () => {
     const handleDragStart = (e: any, user: userInterface) => {
         e.dataTransfer.setData("user", JSON.stringify(user));
     }
+    const handleModalClose = (result: string) => {
+        dispatch(setOpenUserModal());
+        if (result === "success") {
+            setSelectedUser({});
+        }
+        console.log('running');
+    };
     const handleDragEnd = () => {
         console.log('drag just end');
     }
@@ -41,11 +48,6 @@ const UsersList = () => {
                                         dispatch(setOpenUserModal())
                                         setSelectedUser(user)
                                     }}><AiFillEdit /></button>
-                                    <Modal isOpen={openUserModal} onClose={() => {
-                                        dispatch(setOpenUserModal())
-                                    }}>
-                                    </Modal>
-
                                 </div>
                             </div>)}
                     </ul>
@@ -55,10 +57,8 @@ const UsersList = () => {
                 <button className='ml-4 font-bold px-6 py-2 rounded-lg bg-green-600 text-xs text-white' onClick={() => {
                     dispatch(setOpenUserModal())
                 }}>Add Staff</button>
-                <Modal isOpen={openUserModal} onClose={() => {
-                    dispatch(setOpenUserModal())
-                }}>
-                    <AddUser />
+                <Modal isOpen={openUserModal}  onClose={() => handleModalClose('success')}>
+                    <AddUser setSelectedUser={setSelectedUser} user={selectedUser}/>
                 </Modal>
             </div>
 

@@ -13,7 +13,7 @@ const initialState = {
     allUsers: [{
         id: uuidv4(),
         name: "keli Booster",
-        dob: new Date(),
+        dob: new Date("1997-04-12"),
         email: 'kbooster12@gmail.com',
         phone: "+233546149861",
         isAdmin: false
