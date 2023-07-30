@@ -25,7 +25,7 @@ export const genActiveMonth = (monthMonent: moment.Moment, years: yearInterface,
     return
   }
   let i = 0
-  while (i < 5) {
+  while (i < 5 && years[year][lastDay]) {
     binDay = `${monthMonent.startOf('week').format('DD')}-${monthMonent.startOf('week').format('MMM')}`
     activeMonth.push(years[year][binDay])
     i += 1

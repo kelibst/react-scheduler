@@ -20,7 +20,6 @@ const UsersList = () => {
         if (result === "success") {
             setSelectedUser({});
         }
-        console.log('running');
     };
     const handleDragEnd = () => {
         console.log('drag just end');
